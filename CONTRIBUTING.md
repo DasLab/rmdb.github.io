@@ -38,9 +38,8 @@ ID="MY_ENTRY_0000"
 rdat_kit to_md path/to/$ID.rdat > _entries/$ID.md
 $EDITOR _entries/$ID.md     # fill in citation/authors and confirm date
 
-# 5. Generate a thumbnail (optional but recommended)
-python3 aws_archive/regen_thumbnail.py path/to/$ID.rdat \
-    --out assets/thumbnails/
+# 5. Generate a thumbnail (optional but recommended; requires matplotlib)
+rdat_kit thumbnail path/to/$ID.rdat --out assets/thumbnails/
 
 # 6. Upload the .rdat to the right Release
 gh release upload data-general path/to/$ID.rdat --repo DasLab/rmdb.github.io
@@ -96,14 +95,14 @@ All front-matter fields are optional except `rmdb_id`, `name`, `sequence`. If `t
 
 ## Regenerating a thumbnail
 
-`aws_archive/regen_thumbnail.py` renders a single high-resolution PNG (~440 px short axis) from any RDAT. Browsers downscale gracefully on non-retina displays.
+`rdat_kit thumbnail` renders a single high-resolution PNG (~440 px short axis) from any RDAT. Browsers downscale gracefully on non-retina displays.
 
 ```bash
-python3 aws_archive/regen_thumbnail.py path/to/MY_ENTRY_0000.rdat \
-    --out assets/thumbnails/
+pip install 'rdat_kit>=1.8.0' matplotlib   # matplotlib is an optional dep
+rdat_kit thumbnail path/to/MY_ENTRY_0000.rdat --out assets/thumbnails/
 ```
 
-For large libraries (≥1000 data rows) the script truncates to the first 1000 rows automatically. Pass `--max-rows N` to override.
+For large libraries (≥1000 data rows) the script truncates to the first 1000 rows automatically. Pass `--max-rows N` to override (e.g., `--max-rows 5000` for finer detail in mutate-and-map libraries).
 
 ## Using Claude Code (or another LLM agent)
 

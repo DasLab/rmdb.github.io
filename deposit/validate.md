@@ -49,12 +49,18 @@ rdat_kit validate *.rdat
 
 See [the RDAT format spec]({{ '/deposit/specs/' | relative_url }}) for full definitions.
 
-## Generate an entry stub from an RDAT
+## Companion subcommands
 
-The companion `rdat_kit to_md` subcommand emits a Jekyll front-matter stub ready to drop into [`_entries/`](https://github.com/DasLab/rmdb.github.io/tree/main/_entries) when contributing:
+`rdat_kit` exposes three subcommands in total:
 
 ```bash
-rdat_kit to_md path/to/MY_ENTRY_0000.rdat > _entries/MY_ENTRY_0000.md
+rdat_kit validate   <file.rdat>            # this page
+rdat_kit to_md      <file.rdat>            # emit Jekyll front-matter stub
+rdat_kit thumbnail  <file.rdat> --out DIR  # render reactivity heatmap PNG
 ```
 
-This auto-populates `sequence`, `structure`, `offset`, `construct_count`, `data_points`, `annotation`, `comments`, and the citation skeleton from the RDAT contents — saving the contributor from writing the YAML by hand. See [the contribute page]({{ '/contribute/' | relative_url }}) for the full workflow.
+`to_md` auto-populates `sequence`, `structure`, `offset`, `construct_count`, `data_points`, `annotation`, `comments`, and the citation skeleton from the RDAT contents — saving the contributor from writing the YAML by hand.
+
+`thumbnail` requires `matplotlib` (an optional dep): `pip install 'rdat_kit[thumbnail]' or 'pip install matplotlib`. It truncates huge libraries to the first 1000 rows by default (`--max-rows` to override) and renders a heatmap to drop into [`assets/thumbnails/`](https://github.com/DasLab/rmdb.github.io/tree/main/assets/thumbnails).
+
+See [the contribute page]({{ '/contribute/' | relative_url }}) for the full submission workflow.
