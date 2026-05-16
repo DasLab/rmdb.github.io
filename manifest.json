@@ -16,7 +16,7 @@ permalink: /manifest.json
     "construct_count": {{ e.construct_count | default: 0 }},
     "data_points":     {{ e.data_points | default: 0 }},
     "sequence_len":    {{ e.sequence | size }},
-    "thumbnail":       {{ e.thumbnail | jsonify }},
-    "url":             {{ e.url | jsonify }}
+    "thumbnail":       {{ e.thumbnail | relative_url | jsonify }},
+    "url":             {{ e.url        | relative_url | jsonify }}
   }{% unless forloop.last %},{% endunless %}{% endfor %}
 ]

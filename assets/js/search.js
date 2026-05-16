@@ -47,7 +47,7 @@
     });
   }
 
-  fetch('/manifest.json')
+  fetch(window.MANIFEST_URL || '/manifest.json')
     .then(r => r.json())
     .then(all => {
       let sorted = all.slice().sort((a, b) =>

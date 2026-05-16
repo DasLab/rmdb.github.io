@@ -1,7 +1,11 @@
 title: "RMDB: RNA Mapping DataBase"
 description: "An archive of RNA structural mapping experiments (SHAPE, DMS, CMCT, 1M7, mutate-and-map, etc.)."
-url: "https://rmdb.stanford.edu"
-baseurl: ""
+# During preview at https://daslab.stanford.edu/rmdb.github.io/, baseurl
+# must be "/rmdb.github.io" so root-relative paths resolve correctly.
+# At Phase 6 DNS cutover (CNAME re-added, served at root of rmdb.stanford.edu),
+# revert baseurl to "" and url to "https://rmdb.stanford.edu". See CLAUDE.md.
+url: "https://daslab.stanford.edu"
+baseurl: "/rmdb.github.io"
 
 permalink: /:collection/:name/
 

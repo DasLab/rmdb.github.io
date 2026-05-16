@@ -1,0 +1,5 @@
+# Local-preview overrides. Use with:
+#   bundle exec jekyll serve --config _config.yml,_config_local.yml
+# Restores root-served URLs so localhost:4000/ works without a baseurl prefix.
+url: "http://127.0.0.1:4000"
+baseurl: ""
