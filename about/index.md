@@ -21,23 +21,43 @@ What changed from the legacy site:
 
 ## Download all data
 
-Every entry's RDAT file is hosted as a GitHub Release asset on
-[`data-v1`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1).
-You can:
+Every entry's RDAT file lives as a GitHub Release asset, split across **five subcategory releases** so each stays well under GitHub's 1,000-asset-per-release cap:
 
-- **Browse + click**: open the [Release page](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1) and download files individually.
-- **Bulk download** with the GitHub CLI:
+| Release | Holds | Browse |
+|---|---|---|
+| [`data-eterna`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-eterna) | Eterna and OpenKnot library experiments | 181 |
+| [`data-puzzle`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-puzzle) | RNA Puzzles community blind-prediction challenges | 94 |
+| [`data-riboswitches`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-riboswitches) | Riboswitch families (TPP, SAM, glycine, FMN, ZTP, fluoride, …) | 253 |
+| [`data-rna-structures`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-rna-structures) | Ribosomal & transfer RNAs, viral RNAs (CoV-2, HIV, HCV, …), big mutate-and-map libraries | 275 |
+| [`data-general`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-general) | Everything else — heterogeneous tail | 220 |
 
-  ```bash
-  gh release download data-v1 \
-      --repo DasLab/rmdb.github.io \
-      --pattern "*.rdat" \
-      --dir rdats/
-  ```
+### Browse and click
 
-  Replaces the legacy `published_rdat.zip` bundle. Streams directly from GitHub's CDN; no bandwidth charge to either side.
+Open any of the release pages above and download individual `.rdat` files. Each asset is named `<RMDB_ID>.rdat`.
 
-For per-entry programmatic access, each detail page's "Download .rdat" button is a permanent direct link to the same Release asset.
+### Grab one subcategory with the GitHub CLI
+
+```bash
+gh release download data-riboswitches \
+    --repo DasLab/rmdb.github.io \
+    --pattern "*.rdat" \
+    --dir rdats/
+```
+
+### Grab the entire database (all five releases)
+
+```bash
+for r in eterna puzzle riboswitches rna-structures general; do
+    gh release download "data-$r" \
+        --repo DasLab/rmdb.github.io \
+        --pattern "*.rdat" \
+        --dir rdats/
+done
+```
+
+Streams directly from GitHub's CDN — no bandwidth metering on either side, no need for a pre-built `published_rdat.zip`.
+
+For per-entry programmatic access, each detail page's "Download .rdat" button is a permanent direct link to that entry's Release asset.
 
 ## Citation
 
