@@ -4,12 +4,12 @@ title: Validate an RDAT file
 permalink: /deposit/validate/
 ---
 
-The legacy RMDB site offered an in-browser RDAT validator. The static site delegates this to the open-source [`rdat_kit`](https://github.com/ribokit/rdat_kit) Python package.
+The legacy RMDB site offered an in-browser RDAT validator. The static site delegates this to the open-source [`rdat_kit`](https://github.com/ribokit/rdatkit) Python package (≥ v1.7.0).
 
 ## Install
 
 ```bash
-pip install rdat_kit
+pip install 'rdat_kit>=1.7.0'
 ```
 
 ## Validate a file
@@ -18,16 +18,25 @@ pip install rdat_kit
 rdat_kit validate path/to/entry.rdat
 ```
 
-Exit code is `0` on success; on failure, `rdat_kit` prints the line and field where the schema check failed.
+Output is one line per file:
 
-> **Note (planned, May 2026):** The `validate` subcommand is being added to `rdat_kit` as part of the RMDB static-site migration. Until it lands, you can validate by loading the file in Python:
->
-> ```python
-> from rdat_kit.handler import RDATFile
-> rdat = RDATFile()
-> rdat.load(open("entry.rdat"))
-> print(rdat.validate())   # returns list of warnings/errors
-> ```
+```
+path/to/entry.rdat: OK   (1 construct(s), 272 data row(s), RDAT_VERSION=0.34)
+```
+
+Exit code:
+
+| Code | Meaning |
+|------|---------|
+| `0`  | File parsed cleanly and `RDATFile.validate()` returned no warnings |
+| `1`  | Parse failure — malformed file |
+| `2`  | Parsed OK but at least one schema warning (see stdout) |
+
+You can pass multiple files at once:
+
+```bash
+rdat_kit validate *.rdat
+```
 
 ## What is checked
 
@@ -39,3 +48,13 @@ Exit code is `0` on success; on failure, `rdat_kit` prints the line and field wh
 - Numeric fields parse as floats.
 
 See [the RDAT format spec]({{ '/deposit/specs/' | relative_url }}) for full definitions.
+
+## Generate an entry stub from an RDAT
+
+The companion `rdat_kit to_md` subcommand emits a Jekyll front-matter stub ready to drop into [`_entries/`](https://github.com/DasLab/rmdb.github.io/tree/main/_entries) when contributing:
+
+```bash
+rdat_kit to_md path/to/MY_ENTRY_0000.rdat > _entries/MY_ENTRY_0000.md
+```
+
+This auto-populates `sequence`, `structure`, `offset`, `construct_count`, `data_points`, `annotation`, `comments`, and the citation skeleton from the RDAT contents — saving the contributor from writing the YAML by hand. See [the contribute page]({{ '/contribute/' | relative_url }}) for the full workflow.

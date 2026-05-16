@@ -51,7 +51,7 @@
     } else {
       $rows.innerHTML = entries.map(e => `
         <tr>
-          <td>${e.thumbnail ? `<img class="thumb" src="${escapeHTML(e.thumbnail)}" alt="">` : ''}</td>
+          <td>${e.thumbnail ? `<img class="thumb" src="${escapeHTML(e.thumbnail)}" loading="lazy" alt="">` : ''}</td>
           <td><a href="${escapeHTML(e.url)}"><code>${escapeHTML(e.rmdb_id)}</code></a></td>
           <td>${escapeHTML(e.name)}</td>
           <td class="small authors" title="${escapeHTML(e.authors || '')}">${escapeHTML(e.authors || '')}</td>

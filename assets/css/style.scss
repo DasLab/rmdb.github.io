@@ -161,7 +161,15 @@ code, samp, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospa
   vertical-align: middle;
 }
 .browse-table th { background: #f5f5f5; font-weight: 600; }
-.browse-table img.thumb { height: 32px; width: auto; max-width: 80px; }
+.browse-table img.thumb {
+  display: block;
+  width: 80px;
+  max-height: 120px;       // ≈ top 300 data rows at typical px-per-cell
+  height: auto;            // keep aspect for short entries (≤300 rows)
+  object-fit: cover;       // tall entries: preserve aspect, crop bottom
+  object-position: top center;
+  background: #fafafa;     // visible while the PNG loads
+}
 .browse-table td.authors {
   max-width: 18ch;
   overflow: hidden;

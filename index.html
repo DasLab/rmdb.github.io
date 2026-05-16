@@ -37,11 +37,13 @@ title: Home
   <h2>Latest entries</h2>
   <ul class="entry-grid">
     {% assign latest = site.entries | sort: 'date' | reverse %}
-    {% for e in latest limit: 6 %}
+    {% for e in latest limit: 12 %}
       <li class="entry-card">
         <a href="{{ e.url | relative_url }}">
           {% if e.thumbnail %}
-            <img src="{{ e.thumbnail | relative_url }}" alt="Thumbnail for {{ e.rmdb_id }}">
+            <img src="{{ e.thumbnail | relative_url }}"
+                 loading="lazy"
+                 alt="Thumbnail for {{ e.rmdb_id }}">
           {% endif %}
           <div class="entry-card-body">
             <code class="entry-id">{{ e.rmdb_id }}</code>

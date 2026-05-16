@@ -1,12 +1,22 @@
 # Contributing an entry to RMDB
 
-RMDB entries are plain Markdown files in this repo. To add a new entry, open a pull request that adds two files **plus** uploads your RDAT to the `data-v1` GitHub Release:
+RMDB entries are plain Markdown files in this repo. With [`rdat_kit`](https://github.com/ribokit/rdatkit) ≥ 1.7.0 the workflow is essentially three commands.
 
-1. `_entries/<RMDB_ID>.md` — entry metadata (YAML front-matter + optional notes)
-2. `assets/thumbnails/<RMDB_ID>.png` — reactivity thumbnail (optional but encouraged)
-3. **Upload** your `.rdat` to the [`data-v1` Release](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1) as `<RMDB_ID>.rdat` (one command: `gh release upload data-v1 <RMDB_ID>.rdat`). The detail page's "Download .rdat" button links there.
+Each new entry consists of:
 
-RDAT files are **not stored in the repo** — they live as Release assets so GitHub Pages can serve them at full size (LFS can't; some entries are 100–300 MB).
+1. `_entries/<RMDB_ID>.md` — entry metadata (YAML front-matter, generated for you by `rdat_kit to_md`)
+2. `assets/thumbnails/<RMDB_ID>.png` — reactivity thumbnail (optional but encouraged; see [thumbnail-generation](#regenerating-a-thumbnail) below)
+3. Your `.rdat` file uploaded to one of the five subcategory **GitHub Release** tags (not committed to the repo — Pages can't serve git-LFS objects, and some RDATs are 100–300 MB).
+
+Release tags to choose from (pick the one matching your entry's content):
+
+| Tag | Holds |
+|-----|-------|
+| `data-eterna` | Eterna / OpenKnot library experiments |
+| `data-puzzle` | RNA Puzzles community blind-prediction challenges |
+| `data-riboswitches` | TPP, SAM, glycine, FMN, fluoride, ZTP, etc. riboswitches |
+| `data-rna-structures` | rRNA, tRNA, viral RNA, large mutate-and-map libraries |
+| `data-general` | Everything else |
 
 ## Step-by-step
 
@@ -15,78 +25,99 @@ RDAT files are **not stored in the repo** — they live as Release assets so Git
 git clone https://github.com/<you>/rmdb.github.io
 cd rmdb.github.io
 
-# 2. Validate the RDAT file (requires rdat_kit; see /deposit/validate/)
-pip install rdat_kit
-rdat_kit validate path/to/your.rdat
+# 2. Install rdat_kit (one-time)
+pip install 'rdat_kit>=1.7.0'
 
-# 3. Drop the entry files in place
-ID="YOURID_EXP_0000"
-cp path/to/your_thumb.png  assets/thumbnails/$ID.png
+# 3. Validate your RDAT
+rdat_kit validate path/to/MY_ENTRY_0000.rdat
+#   path/to/MY_ENTRY_0000.rdat: OK   (16 construct(s), 990 data row(s), RDAT_VERSION=0.34)
 
-# 4. Author the entry .md (see template below)
-$EDITOR _entries/$ID.md
+# 4. Generate the entry .md stub from the RDAT (auto-fills sequence,
+#    structure, annotations, comments, counts)
+ID="MY_ENTRY_0000"
+rdat_kit to_md path/to/$ID.rdat > _entries/$ID.md
+$EDITOR _entries/$ID.md     # fill in citation/authors and confirm date
 
-# 5. Upload the .rdat to the data-v1 Release (handled separately from git):
-gh release upload data-v1 path/to/your.rdat --repo DasLab/rmdb.github.io \
-   # Rename your file to <RMDB_ID>.rdat before uploading.
+# 5. Generate a thumbnail (optional but recommended)
+python3 aws_archive/regen_thumbnail.py path/to/$ID.rdat \
+    --out assets/thumbnails/
 
-# 6. Commit + push the .md and thumbnail, open a PR
-git add assets/thumbnails/$ID.png _entries/$ID.md
+# 6. Upload the .rdat to the right Release
+gh release upload data-general path/to/$ID.rdat --repo DasLab/rmdb.github.io
+
+# 7. Commit the .md + thumbnail, push, open a PR
+git add _entries/$ID.md assets/thumbnails/$ID.png
 git commit -m "Add entry $ID"
 git push origin HEAD
+gh pr create --fill
 ```
 
-## Entry `.md` template
+## Entry `.md` after step 4
 
-Copy any file from `_entries/` as a starting point, or use this template:
+`rdat_kit to_md` emits something like:
 
 ```yaml
 ---
-rmdb_id: YOURID_EXP_0000
-name: "Short human-readable name"
-category: General            # General | RNA_Puzzles | Eterna
-date: 2026-05-15             # ISO date; used for "Latest entries" sort
+rmdb_id: "MY_ENTRY_0000"
+permalink: /detail/MY_ENTRY_0000/
+name: "Construct name from the RDAT"
+category: "General"     # General | RNA_Puzzles | Eterna  ← update if needed
+date: 2026-05-16        # update with the original deposition date if known
 sequence: "GGGAAACUGCC..."
-structure: "(((..((....."    # dot-bracket; same length as sequence
+structure: "(((..((....."
 offset: 0
-construct_count: 1
-data_points: 250
-creation_date: "05/15/26"    # free-form display string from your RDAT
-version: 1
-owner: "Your Name"
-citation:
-  authors:  "Your, A., Other, B."
-  title:    "Your paper title"
-  journal:  "Nature Methods"
-  year:     2026
-  doi:      "10.1038/s41592-..."
-  pubmed:   "12345678"
+construct_count: 16
+data_points: 990
+comments: |
+    (whatever was in the RDAT's COMMENT lines)
 annotation:
   chemical:   ["MgCl2:10mM", "Na-HEPES:50mM(pH8.0)"]
   temperature: "24C"
   modifier:   "1M7"
-thumbnail: /assets/thumbnails/YOURID_EXP_0000.png
-rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-v1/YOURID_EXP_0000.rdat
+citation:
+  authors: ""        # ← fill in
+  title:   ""
+  journal: ""
+  year:    ""
+  doi:     ""
+  pubmed:  ""
+thumbnail: /assets/thumbnails/MY_ENTRY_0000.png
+rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-general/MY_ENTRY_0000.rdat
 ---
-
-Optional Markdown notes (rendered into the "Notes" section of the entry page).
 ```
+
+You only need to fill in:
+- `citation:` block (authors, title, journal, year, DOI, PubMed ID)
+- `date:` (the actual deposition date — default is today)
+- `category:` if not General
+- The release tag in `rdat:` if you uploaded somewhere other than `data-general`
 
 All front-matter fields are optional except `rmdb_id`, `name`, `sequence`. If `thumbnail` or `rdat` is omitted, the corresponding panel on the entry page is hidden.
 
+## Regenerating a thumbnail
+
+`aws_archive/regen_thumbnail.py` renders a single high-resolution PNG (~440 px short axis) from any RDAT. Browsers downscale gracefully on non-retina displays.
+
+```bash
+python3 aws_archive/regen_thumbnail.py path/to/MY_ENTRY_0000.rdat \
+    --out assets/thumbnails/
+```
+
+For large libraries (≥1000 data rows) the script truncates to the first 1000 rows automatically. Pass `--max-rows N` to override.
+
 ## Using Claude Code (or another LLM agent)
 
-If you have an RDAT file and a publication, you can hand the task to an LLM coding agent. A prompt like:
+The contribution workflow is short and well-defined, which makes it well-suited to LLM coding agents. A prompt like:
 
-> "Here's `my_entry.rdat` and the publication PDF. Read RMDB's CONTRIBUTING.md, parse the RDAT with rdat_kit to extract sequence/structure/annotations, fetch the citation from the PMID, and add this entry as a new branch and PR."
+> *"I have `my_entry.rdat` and this publication PDF. Read RMDB's CONTRIBUTING.md, run `rdat_kit to_md` to produce the .md stub, fill the citation block from the PDF (or fetch by PMID), regenerate the thumbnail with `regen_thumbnail.py`, upload the .rdat to `data-general`, and open a PR."*
 
-is usually enough — the agent reads this file, infers the field mapping, runs `rdat_kit` to populate the data, and opens a PR for you to review.
+is usually enough — the agent reads this file, runs the commands, and opens the PR for you to review.
 
 ## Preview locally
 
 ```bash
 bundle install
-bundle exec jekyll serve
+bundle exec jekyll serve --config _config.yml,_config_local.yml
 # Open http://localhost:4000/detail/<RMDB_ID>/
 ```
 
