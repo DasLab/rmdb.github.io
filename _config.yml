@@ -1,0 +1,28 @@
+title: "RMDB: RNA Mapping DataBase"
+description: "An archive of RNA structural mapping experiments (SHAPE, DMS, CMCT, 1M7, mutate-and-map, etc.)."
+url: "https://rmdb.stanford.edu"
+baseurl: ""
+
+permalink: /:collection/:name/
+
+collections:
+  entries:
+    output: true
+    permalink: /detail/:name/
+
+defaults:
+  - scope: { path: "" }
+    values: { layout: "default" }
+  - scope: { path: "", type: "entries" }
+    values: { layout: "entry" }
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - README.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - .bundle
+
+plugins: []

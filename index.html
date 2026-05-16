@@ -1,0 +1,56 @@
+---
+layout: default
+title: Home
+---
+{% assign total_data = 0 %}
+{% assign total_constructs = 0 %}
+{% for e in site.entries %}
+  {% assign total_data = total_data | plus: e.data_points %}
+  {% assign total_constructs = total_constructs | plus: e.construct_count %}
+{% endfor %}
+
+<section class="hero">
+  <h1>RNA Mapping Database</h1>
+  <p class="hero-sub">
+    Chemical Mapping Data of
+    <strong>{{ total_data | default: 0 }}</strong> data points across
+    <strong>{{ site.entries | size }}</strong> entries and
+    <strong>{{ total_constructs | default: 0 }}</strong> RNA constructs.
+  </p>
+
+  <form class="hero-search" action="{{ '/browse/' | relative_url }}" method="get" role="search">
+    <input type="search" name="q" placeholder="Search entries by ID, name, author, PubMed…" aria-label="Search RMDB">
+    <button type="submit">Search</button>
+  </form>
+</section>
+
+<section class="about-blurb">
+  <p>
+    The <u>R</u>NA <u>M</u>apping <u>D</u>ata<u>b</u>ase is an archive of diverse structural mapping experiments
+    performed on RNA (SHAPE, DMS, CMCT, 1M7, mutate-and-map, and more). Each entry is hand-curated and
+    annotated, stored in the open <a href="{{ '/deposit/specs/' | relative_url }}">RDAT format</a>, and
+    versioned through git.
+  </p>
+</section>
+
+<section class="latest">
+  <h2>Latest entries</h2>
+  <ul class="entry-grid">
+    {% assign latest = site.entries | sort: 'date' | reverse %}
+    {% for e in latest limit: 6 %}
+      <li class="entry-card">
+        <a href="{{ e.url | relative_url }}">
+          {% if e.thumbnail %}
+            <img src="{{ e.thumbnail | relative_url }}" alt="Thumbnail for {{ e.rmdb_id }}">
+          {% endif %}
+          <div class="entry-card-body">
+            <code class="entry-id">{{ e.rmdb_id }}</code>
+            <p class="entry-card-name">{{ e.name }}</p>
+            {% if e.creation_date %}<p class="muted small">{{ e.creation_date }}</p>{% endif %}
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  <p><a href="{{ '/browse/' | relative_url }}">Browse all entries →</a></p>
+</section>

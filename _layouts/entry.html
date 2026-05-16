@@ -1,0 +1,89 @@
+---
+layout: default
+---
+<article class="entry">
+  <header class="entry-header">
+    <h1>{{ page.rmdb_id }}</h1>
+    <p class="entry-name">{{ page.name }}</p>
+    {% if page.category %}<span class="badge badge-{{ page.category | downcase }}">{{ page.category }}</span>{% endif %}
+  </header>
+
+  <section class="entry-thumb">
+    {% if page.thumbnail %}
+      <img src="{{ page.thumbnail | relative_url }}" alt="Reactivity heatmap for {{ page.rmdb_id }}">
+    {% else %}
+      <p class="muted">(no thumbnail available)</p>
+    {% endif %}
+  </section>
+
+  <section class="entry-download">
+    {% if page.rdat %}
+      <a class="btn" href="{{ page.rdat | relative_url }}" download>Download .rdat</a>
+    {% endif %}
+    {% if page.pubmed_id %}
+      <a class="btn-secondary" href="https://www.ncbi.nlm.nih.gov/pubmed/{{ page.pubmed_id }}" target="_blank" rel="noopener">PubMed {{ page.pubmed_id }}</a>
+    {% endif %}
+    {% if page.doi %}
+      <a class="btn-secondary" href="https://doi.org/{{ page.doi }}" target="_blank" rel="noopener">DOI</a>
+    {% endif %}
+  </section>
+
+  <section class="entry-construct">
+    <h2>Construct</h2>
+    <dl class="kv">
+      <dt>RMDB ID</dt><dd><code>{{ page.rmdb_id }}</code></dd>
+      <dt>Name</dt><dd>{{ page.name | default: "—" }}</dd>
+      <dt>Sequence ({{ page.sequence | size }} nt)</dt>
+        <dd class="mono break"><samp>{{ page.sequence }}</samp></dd>
+      <dt>Structure</dt>
+        <dd class="mono break"><samp>{{ page.structure | default: "—" }}</samp></dd>
+      <dt>Offset</dt><dd>{{ page.offset | default: 0 }}</dd>
+      {% if page.construct_count %}<dt># of constructs</dt><dd>{{ page.construct_count }}</dd>{% endif %}
+      {% if page.data_points %}<dt># of data points</dt><dd>{{ page.data_points }}</dd>{% endif %}
+      {% if page.creation_date %}<dt>Last modified</dt><dd>{{ page.creation_date }}</dd>{% endif %}
+      {% if page.version %}<dt>Version</dt><dd>{{ page.version }}</dd>{% endif %}
+      {% if page.owner %}<dt>Owner</dt><dd>{{ page.owner }}</dd>{% endif %}
+    </dl>
+
+    {% if page.comments %}
+      <h3>Comments</h3>
+      <pre class="comments">{{ page.comments }}</pre>
+    {% endif %}
+
+    {% if page.annotation %}
+      <h3>Annotation</h3>
+      <ul class="annot">
+        {% for cat in page.annotation %}
+          <li><strong>{{ cat[0] }}:</strong>
+            {% if cat[1].size %}{{ cat[1] | join: ", " }}{% else %}{{ cat[1] }}{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </section>
+
+  <section class="entry-citation">
+    <h2>Citation</h2>
+    {% if page.citation %}
+      <p>
+        {% if page.citation.authors %}{{ page.citation.authors }}{% endif %}
+        {% if page.citation.title %} <b>{{ page.citation.title }}</b>.{% endif %}
+        {% if page.citation.journal %} <i>{{ page.citation.journal }}</i>{% endif %}
+        {% if page.citation.year %} ({{ page.citation.year }}){% endif %}
+        {% if page.citation.doi %}. <a href="https://doi.org/{{ page.citation.doi }}" target="_blank" rel="noopener">doi:{{ page.citation.doi }}</a>{% endif %}
+        {% if page.citation.pubmed %}. <a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ page.citation.pubmed }}" target="_blank" rel="noopener">PMID:{{ page.citation.pubmed }}</a>{% endif %}
+      </p>
+    {% else %}
+      <p class="muted">No citation on file.</p>
+    {% endif %}
+  </section>
+
+  {% if content and content != "" %}
+    <section class="entry-notes">
+      <h2>Notes</h2>
+      {{ content }}
+    </section>
+  {% endif %}
+
+  <p class="entry-back"><a href="{{ '/browse/' | relative_url }}">← Back to browse</a></p>
+</article>

@@ -1,0 +1,22 @@
+<header class="site-header">
+  <a class="brand" href="{{ '/' | relative_url }}">
+    <img src="{{ '/assets/images/logo_rmdb.png' | relative_url }}" alt="RMDB" height="60">
+  </a>
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="nav-toggle-label" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </label>
+
+  <nav class="primary-nav" aria-label="Primary">
+    {% assign nav_items = "Browse,/browse/|Deposit,/deposit/|Contribute,/contribute/|About,/about/" | split: "|" %}
+    {% for item in nav_items %}
+      {% assign parts = item | split: "," %}
+      {% assign label = parts[0] %}
+      {% assign url = parts[1] %}
+      {% assign current = false %}
+      {% if url != "/" and page.url contains url %}{% assign current = true %}{% endif %}
+      <a href="{{ url | relative_url }}"{% if current %} aria-current="page"{% endif %}>{{ label }}</a>
+    {% endfor %}
+  </nav>
+</header>
