@@ -19,6 +19,26 @@ What changed from the legacy site:
 - **MyRMDB / Submit Entry / Analyze / Tools** menus have been removed.
 - **Deposit** still documents the RDAT format and validation; **Contribute** explains the PR workflow for adding new entries.
 
+## Download all data
+
+Every entry's RDAT file is hosted as a GitHub Release asset on
+[`data-v1`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1).
+You can:
+
+- **Browse + click**: open the [Release page](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1) and download files individually.
+- **Bulk download** with the GitHub CLI:
+
+  ```bash
+  gh release download data-v1 \
+      --repo DasLab/rmdb.github.io \
+      --pattern "*.rdat" \
+      --dir rdats/
+  ```
+
+  Replaces the legacy `published_rdat.zip` bundle. Streams directly from GitHub's CDN; no bandwidth charge to either side.
+
+For per-entry programmatic access, each detail page's "Download .rdat" button is a permanent direct link to the same Release asset.
+
 ## Citation
 
 If you use RMDB data in your research, please cite:

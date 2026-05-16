@@ -1,8 +1,8 @@
 ---
-rmdb_id: 16SFWJ_STD_0001
+rmdb_id: "16SFWJ_STD_0001"
 permalink: /detail/16SFWJ_STD_0001/
 name: "16S rRNA Four-Way Junction"
-category: General
+category: "General"
 date: 2017-12-17
 creation_date: "12/17/17"
 version: 1
@@ -13,26 +13,22 @@ construct_count: 13
 data_points: 990
 owner: "Siqi Tian"
 comments: |
-  Averaged over 4 replicates.
-  RNA was heated to 90 C for 2 min and cooled on ice for 2 min, then incubated at 37 C
-  for 20 min at pH 8.0 with 10 mM MgCl2 to aid folding.
-  Additional sequences at 5' and 3' end not shown; two different flanking sequences were
-  used and averaged.
-  Data are normalized based on GAGUA pentaloops in flanking sequences (not shown).
-  DMS, CMCT, and SHAPE normalized so that As, Us, or all 5 loop residues give mean
-  reactivity of 2.0.
+    Averaged over 4 replicates
+    RNA was heat to 90 C for 2 min and cool on ice for 2 min, then incubated at 37 C for 20 min at pH 8.0 with 10 mM MgCl2 to aid folding.
+    Additional sequences at 5' and 3' end not shown; two different flanking sequences were used and averaged.
+    Data are normalized based on GAGUA pentaloops in flanking sequences (not shown).
+    DMS, CMCT, and SHAPE normalized so that As, Us, or all 5 loop residues give mean reactivity of 2.0.
 annotation:
-  chemical:    ["Na-HEPES:50mM(pH8.0)", "MgCl2:10mM"]
-  processing:  ["backgroundSubtraction", "overmodificationCorrection"]
-  temperature: "24C"
-  modifiers:   ["1M7", "DMS", "CMCT"]
+  processing: ["backgroundSubtraction", "overmodificationCorrection"]
+  temperature: ["24C"]
+  chemical: ["Na-HEPES:50mM(pH8.0)", "MgCl2:10mM"]
 citation:
-  authors: "Tian S, Cordero P, Kladwang W, Das R."
+  authors: "Tian S, Cordero P, Kladwang W, Das R"
   title:   "High-throughput mutate-map-rescue evaluates SHAPE-directed RNA structure and uncovers excited states"
-  journal: "RNA"
-  year:    2014
+  journal: "RNA (New York, N.Y.)"
+  year:    "2014"
   doi:     "10.1261/rna.044321.114"
   pubmed:  "25183835"
 thumbnail: /assets/thumbnails/16SFWJ_STD_0001.png
-rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-v1/16SFWJ_STD_0001.rdat
+rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-rna-structures/16SFWJ_STD_0001.rdat
 ---

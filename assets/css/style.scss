@@ -168,6 +168,26 @@ code, samp, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospa
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.browse-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  padding-right: 1.6rem;
+  position: relative;
+}
+.browse-table th.sortable::after {
+  content: "▲▼";
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  letter-spacing: -2px;
+  color: #bbb;
+  font-weight: 400;
+}
+.browse-table th.sortable[data-sort-state="asc"]::after  { content: "▲"; color: $accent; }
+.browse-table th.sortable[data-sort-state="desc"]::after { content: "▼"; color: $accent; }
+.browse-table th.sortable:hover { background: #ebebeb; }
 
 /* ---------- entry detail ---------- */
 .entry-header { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
