@@ -1,10 +1,12 @@
 # Contributing an entry to RMDB
 
-RMDB entries are plain Markdown files in this repo. To add a new entry, open a pull request that adds three files:
+RMDB entries are plain Markdown files in this repo. To add a new entry, open a pull request that adds two files **plus** uploads your RDAT to the `data-v1` GitHub Release:
 
 1. `_entries/<RMDB_ID>.md` — entry metadata (YAML front-matter + optional notes)
-2. `data/<RMDB_ID>.rdat`   — your RDAT file (git-LFS tracked; `git lfs install` if you haven't already)
-3. `assets/thumbnails/<RMDB_ID>.png` — reactivity thumbnail (optional but encouraged)
+2. `assets/thumbnails/<RMDB_ID>.png` — reactivity thumbnail (optional but encouraged)
+3. **Upload** your `.rdat` to the [`data-v1` Release](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1) as `<RMDB_ID>.rdat` (one command: `gh release upload data-v1 <RMDB_ID>.rdat`). The detail page's "Download .rdat" button links there.
+
+RDAT files are **not stored in the repo** — they live as Release assets so GitHub Pages can serve them at full size (LFS can't; some entries are 100–300 MB).
 
 ## Step-by-step
 
@@ -12,22 +14,24 @@ RMDB entries are plain Markdown files in this repo. To add a new entry, open a p
 # 1. Fork + clone
 git clone https://github.com/<you>/rmdb.github.io
 cd rmdb.github.io
-git lfs install
 
 # 2. Validate the RDAT file (requires rdat_kit; see /deposit/validate/)
 pip install rdat_kit
 rdat_kit validate path/to/your.rdat
 
-# 3. Drop the files in place
+# 3. Drop the entry files in place
 ID="YOURID_EXP_0000"
-cp path/to/your.rdat       data/$ID.rdat
 cp path/to/your_thumb.png  assets/thumbnails/$ID.png
 
 # 4. Author the entry .md (see template below)
 $EDITOR _entries/$ID.md
 
-# 5. Commit (LFS handles the .rdat) and open a PR
-git add data/$ID.rdat assets/thumbnails/$ID.png _entries/$ID.md
+# 5. Upload the .rdat to the data-v1 Release (handled separately from git):
+gh release upload data-v1 path/to/your.rdat --repo DasLab/rmdb.github.io \
+   # Rename your file to <RMDB_ID>.rdat before uploading.
+
+# 6. Commit + push the .md and thumbnail, open a PR
+git add assets/thumbnails/$ID.png _entries/$ID.md
 git commit -m "Add entry $ID"
 git push origin HEAD
 ```
@@ -62,7 +66,7 @@ annotation:
   temperature: "24C"
   modifier:   "1M7"
 thumbnail: /assets/thumbnails/YOURID_EXP_0000.png
-rdat:      /data/YOURID_EXP_0000.rdat
+rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-v1/YOURID_EXP_0000.rdat
 ---
 
 Optional Markdown notes (rendered into the "Notes" section of the entry page).

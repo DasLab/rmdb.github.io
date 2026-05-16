@@ -2,7 +2,7 @@
 
 Static GitHub Pages mirror of [rmdb.stanford.edu](https://rmdb.stanford.edu) — the RNA Mapping Database.
 
-Built with vanilla Jekyll (no custom plugins). Each entry is a single Markdown file under `_entries/<RMDB_ID>.md`; RDAT data files live under `data/` (git-LFS); reactivity thumbnails under `assets/thumbnails/`.
+Built with vanilla Jekyll (no custom plugins). Each entry is a single Markdown file under `_entries/<RMDB_ID>.md`; reactivity thumbnails under `assets/thumbnails/`; RDAT data files live as assets on the [`data-v1` GitHub Release](https://github.com/DasLab/rmdb.github.io/releases/tag/data-v1) (not in the repo — Pages can't serve git-LFS objects, and some RDATs are 100–300 MB).
 
 ## Local preview
 
@@ -23,8 +23,8 @@ _config.yml                 Jekyll config; declares `entries` collection
 _layouts/                   default | page | entry layouts
 _includes/                  head, nav, footer partials
 _entries/<RMDB_ID>.md       one per entry (YAML front-matter + optional Markdown notes)
-data/<RMDB_ID>.rdat         RDAT data file, LFS-tracked
 assets/thumbnails/<X>.png   reactivity thumbnail
+# RDATs are NOT in the repo — they're assets on the data-v1 Release.
 assets/css/style.scss       site styles
 assets/js/search.js         browse-page client-side filter
 manifest.json               Liquid-templated index of all entries (for client-side search)

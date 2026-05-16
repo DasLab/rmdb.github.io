@@ -34,5 +34,5 @@ citation:
   doi:     "10.1261/rna.044321.114"
   pubmed:  "25183835"
 thumbnail: /assets/thumbnails/16SFWJ_STD_0001.png
-rdat:      /data/16SFWJ_STD_0001.rdat
+rdat:      https://github.com/DasLab/rmdb.github.io/releases/download/data-v1/16SFWJ_STD_0001.rdat
 ---
