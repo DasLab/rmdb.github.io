@@ -1,0 +1,24 @@
+{%- comment -%}
+  Format an integer with comma thousand separators.
+  Usage: {% include comma.html n=520683750 %}  →  520,683,750
+  Handles values up to ~999,999,999,999 (12 digits) — well beyond RMDB's needs.
+{%- endcomment -%}
+{%- assign n = include.n | plus: 0 -%}
+{%- if n >= 1000000000 -%}
+  {%- assign g = n | divided_by: 1000000000 -%}
+  {%- assign m = n | modulo: 1000000000 | divided_by: 1000000 -%}
+  {%- assign k = n | modulo: 1000000 | divided_by: 1000 -%}
+  {%- assign u = n | modulo: 1000 -%}
+  {{- g -}},{{- m | prepend: '00' | slice: -3, 3 -}},{{- k | prepend: '00' | slice: -3, 3 -}},{{- u | prepend: '00' | slice: -3, 3 -}}
+{%- elsif n >= 1000000 -%}
+  {%- assign m = n | divided_by: 1000000 -%}
+  {%- assign k = n | modulo: 1000000 | divided_by: 1000 -%}
+  {%- assign u = n | modulo: 1000 -%}
+  {{- m -}},{{- k | prepend: '00' | slice: -3, 3 -}},{{- u | prepend: '00' | slice: -3, 3 -}}
+{%- elsif n >= 1000 -%}
+  {%- assign k = n | divided_by: 1000 -%}
+  {%- assign u = n | modulo: 1000 -%}
+  {{- k -}},{{- u | prepend: '00' | slice: -3, 3 -}}
+{%- else -%}
+  {{- n -}}
+{%- endif -%}

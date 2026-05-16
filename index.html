@@ -13,9 +13,9 @@ title: Home
   <h1>RNA Mapping Database</h1>
   <p class="hero-sub">
     Chemical Mapping Data of
-    <strong>{{ total_data | default: 0 }}</strong> data points across
-    <strong>{{ site.entries | size }}</strong> entries and
-    <strong>{{ total_constructs | default: 0 }}</strong> RNA constructs.
+    <strong>{% include comma.html n=total_data %}</strong> data points across
+    <strong>{% include comma.html n=site.entries.size %}</strong> entries and
+    <strong>{% include comma.html n=total_constructs %}</strong> RNA constructs.
   </p>
 
   <form class="hero-search" action="{{ '/browse/' | relative_url }}" method="get" role="search">
