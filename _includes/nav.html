@@ -9,7 +9,7 @@
   </label>
 
   <nav class="primary-nav" aria-label="Primary">
-    {% assign nav_items = "Home,/|Browse,/browse/|Deposit,/deposit/|Contribute,/contribute/|About,/about/" | split: "|" %}
+    {% assign nav_items = "Home,/|Browse,/browse/|Deposit,/deposit/|About,/about/" | split: "|" %}
     {% for item in nav_items %}
       {% assign parts = item | split: "," %}
       {% assign label = parts[0] %}

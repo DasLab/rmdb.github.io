@@ -63,4 +63,4 @@ rdat_kit thumbnail  <file.rdat> --out DIR  # render reactivity heatmap PNG
 
 `thumbnail` requires `matplotlib` (an optional dep): `pip install 'rdat_kit[thumbnail]' or 'pip install matplotlib`. It truncates huge libraries to the first 1000 rows by default (`--max-rows` to override) and renders a heatmap to drop into [`assets/thumbnails/`](https://github.com/DasLab/rmdb.github.io/tree/main/assets/thumbnails).
 
-See [the contribute page]({{ '/contribute/' | relative_url }}) for the full submission workflow.
+See [the deposit page]({{ '/deposit/' | relative_url }}) for the full submission workflow.

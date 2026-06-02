@@ -12,11 +12,11 @@ Release tags to choose from (pick the one matching your entry's content):
 
 | Tag | Holds |
 |-----|-------|
-| `data-eterna` | Eterna / OpenKnot library experiments |
-| `data-puzzle` | RNA Puzzles community blind-prediction challenges |
-| `data-riboswitches` | TPP, SAM, glycine, FMN, fluoride, ZTP, etc. riboswitches |
-| `data-rna-structures` | rRNA, tRNA, viral RNA, large mutate-and-map libraries |
-| `data-general` | Everything else |
+| [`data-eterna`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-eterna) | Eterna / OpenKnot library experiments |
+| [`data-puzzle`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-puzzle) | RNA Puzzles community blind-prediction challenges |
+| [`data-riboswitches`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-riboswitches) | TPP, SAM, glycine, FMN, fluoride, ZTP, etc. riboswitches |
+| [`data-rna-structures`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-rna-structures) | rRNA, tRNA, viral RNA, large mutate-and-map libraries |
+| [`data-general`](https://github.com/DasLab/rmdb.github.io/releases/tag/data-general) | Everything else (default if you're unsure) |
 
 ## Step-by-step
 
@@ -25,8 +25,9 @@ Release tags to choose from (pick the one matching your entry's content):
 git clone https://github.com/<you>/rmdb.github.io
 cd rmdb.github.io
 
-# 2. Install rdat_kit (one-time)
-pip install 'rdat_kit>=1.7.0'
+# 2. One-time setup
+pip install 'rdat_kit>=1.8.0' matplotlib   # matplotlib only needed for thumbnail
+gh auth login                              # GitHub CLI; needed for the Release upload
 
 # 3. Validate your RDAT
 rdat_kit validate path/to/MY_ENTRY_0000.rdat
@@ -108,7 +109,7 @@ For large libraries (≥1000 data rows) the script truncates to the first 1000 r
 
 The contribution workflow is short and well-defined, which makes it well-suited to LLM coding agents. A prompt like:
 
-> *"I have `my_entry.rdat` and this publication PDF. Read RMDB's CONTRIBUTING.md, run `rdat_kit to_md` to produce the .md stub, fill the citation block from the PDF (or fetch by PMID), regenerate the thumbnail with `regen_thumbnail.py`, upload the .rdat to `data-general`, and open a PR."*
+> *"I have `my_entry.rdat` and this publication PDF. Read RMDB's CONTRIBUTING.md, run `rdat_kit to_md` to produce the .md stub, fill the citation block from the PDF (or fetch by PMID), render the thumbnail with `rdat_kit thumbnail`, upload the .rdat to `data-general`, and open a PR."*
 
 is usually enough — the agent reads this file, runs the commands, and opens the PR for you to review.
 
