@@ -1,0 +1,75 @@
+---
+layout: page
+title: Page not found
+permalink: /404.html
+sitemap: false
+---
+
+<p>That address doesn't exist on RMDB. If you followed a link to the old Django site, it may have
+moved when RMDB became a static archive — try <a href="{{ '/browse/' | relative_url }}">Browse</a>
+to search all entries by ID, name, author, or PubMed ID.</p>
+
+<p><a class="btn" href="{{ '/' | relative_url }}">Home</a>
+   <a class="btn-secondary" href="{{ '/browse/' | relative_url }}">Browse entries</a></p>
+
+<script>
+// Legacy URL router. The old Django app carried its own redirect layer (Server_RMDB
+// src/urls.py + views.py); it died with the server, so reproduce it here. GitHub Pages
+// serves this page for any missing path, at any depth, so one file covers every family.
+(function () {
+  var ID = '[A-Za-z0-9_]{1,20}';          // e.g. GLYCFN_KNK_0002, and 5SSC__1M7_0001
+  var p = location.pathname;
+  var stripped = false;
+
+  // urls.py:128 — the whole pre-2015 /repository/* namespace mapped onto the site root.
+  if (p.indexOf('/repository/') === 0) { p = p.slice('/repository'.length); stripped = true; }
+  else if (p === '/repository') { p = '/'; stripped = true; }
+
+  // views.py:94 — package docs 301'd to RiboKit, reachable as /tools/docs/<kw>/ or bare /<kw>/.
+  var DOCS = { rdatkit: 'RDATKit', hitrace: 'HiTRACE', mapseeker: 'MAPseeker',
+               reeffit: 'REEFFIT', biers: 'Biers' };
+  function toDocs(m) { return 'https://ribokit.github.io/' + DOCS[m[1].toLowerCase()] + '/'; }
+
+  var RULES = [
+    // urls.py:129-130 — file downloads went to /site_data/file/. RDATs now live on GitHub
+    // Releases under five tags, so land on the entry page, which carries the right link.
+    [new RegExp('^/site_media/(?:rdat_files|isatab_files)/(' + ID + ')(?:/.*)?$'), '/detail/$1/'],
+    [new RegExp('^/site_data/file/(' + ID + ')(?:/.*)?$'),                         '/detail/$1/'],
+
+    // Search is now the client-side filter on Browse.
+    [/^\/(?:search|advanced_search)\/?$/, '/browse/'],
+    [/^\/browse\/table\/?$/,              '/browse/'],
+
+    [/^\/tools\/docs\/(rdatkit|hitrace|mapseeker|reeffit|biers)\/?$/i, toDocs],
+    [/^\/(rdatkit|hitrace|mapseeker|reeffit|biers)\/?$/i,              toDocs],
+
+    // The tools and help sections were folded into About.
+    [/^\/tools(?:\/.*)?$/,                        '/about/'],
+    [/^\/help\/(?:about|license|history)\/?$/,    '/about/']
+  ];
+
+  function go(to) {
+    if (to.indexOf('http') !== 0) {
+      // Pages 301s a slashless directory to its trailing-slash form; do it here and save a hop.
+      if (to.slice(-1) !== '/' && to.split('/').pop().indexOf('.') === -1) to += '/';
+      var qs = location.search;
+      // Old detail pages linked /browse/table?pubmed_id=N; Browse matches PubMed IDs via ?q=.
+      var pmid = qs.match(/[?&]pubmed_id=(\d+)/);
+      if (pmid) qs = '?q=' + pmid[1];
+      to += qs + location.hash;
+    }
+    location.replace(to);
+  }
+
+  for (var i = 0; i < RULES.length; i++) {
+    var m = p.match(RULES[i][0]);
+    if (!m) continue;
+    var to = RULES[i][1];
+    go(typeof to === 'function' ? to(m) : to.replace('$1', m[1]));
+    return;
+  }
+
+  // urls.py:128 again — /repository/<anything else> still went through to the stripped path.
+  if (stripped) go(p);
+})();
+</script>
